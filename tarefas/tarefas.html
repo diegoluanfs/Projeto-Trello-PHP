@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Formulário de Tarefas</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+	<h1>Cadastrar Tarefas</h1>
+
+	<form id="tarefa-form" method="post">
+		<label for="tarefa">Nome da Tarefa:</label>
+		<input type="text" id="tarefa" name="tarefa">
+		<br><br>
+		<label for="descricao">Descrição:</label>
+		<input type="text" id="descricao" name="descricao">
+		<br><br>
+		<label for="projeto">Projeto:</label>
+		<select id="projeto" name="projeto">
+			<option value="">Selecione um projeto</option>
+		</select>
+		<br><br>
+		<input type="submit" value="Salvar">
+	</form>
+
+    <!-- Biblioteca responsável pelos sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+	<script src="./tarefas.js"></script>
+</body>
+</html>
