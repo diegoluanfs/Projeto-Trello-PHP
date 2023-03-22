@@ -10,6 +10,8 @@ if ($conn->connect_error) {
 // receber os dados do formulário
 $projeto = $_POST["projeto"];
 
+echo "Projeto: ", $projeto;
+
 // inserir os dados no banco de dados
 $sql = "INSERT INTO tb_projetos (nome) VALUES ('$projeto')";
 if ($conn->query($sql) === TRUE) {
