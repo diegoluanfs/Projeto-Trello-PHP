@@ -10,12 +10,11 @@ if ($conn->connect_error) {
 // receber os dados do formulário
 $projeto = $_POST["projeto"];
 
-echo "Projeto: ", $projeto;
-
 // inserir os dados no banco de dados
 $sql = "INSERT INTO tb_projetos (nome) VALUES ('$projeto')";
 if ($conn->query($sql) === TRUE) {
-    echo "Projeto cadastrado com sucesso!";
+    $id_projeto = $conn->insert_id; // Obtém o ID do último registro inserido
+    echo $id_projeto; // Retorna o ID do projeto cadastrado
 } else {
     echo "Erro ao cadastrar o projeto: " . $conn->error;
 }

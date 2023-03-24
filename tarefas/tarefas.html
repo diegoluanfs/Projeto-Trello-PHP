@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Formulário de Tarefas</title>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Formulário do Projeto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
-<body>
+<body class="vh-100 d-flex justify-content-center align-items-center">
 
-	<h1>Cadastrar Tarefas</h1>
 
-	<form id="tarefa-form" method="post">
-		<label for="tarefa">Nome da Tarefa:</label>
-		<input type="text" id="tarefa" name="tarefa">
-		<br><br>
-		<label for="descricao">Descrição:</label>
-		<input type="text" id="descricao" name="descricao">
-		<br><br>
-		<label for="projeto">Projeto:</label>
-		<select id="projeto" name="projeto">
-			<option value="">Selecione um projeto</option>
-		</select>
-		<br><br>
-		<input type="submit" value="Salvar">
-	</form>
+    <form id="tarefa-form" method="post">
+<div class="input-group mb-3">
+    <h1>Cadastrar Tarefas</h1>
+</div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="idProjeto" name="idProjeto" placeholder="Id do projeto" aria-label="Id do Projeto" aria-describedby="button-addon2" style="display: block;">
+            </div>
+			<div class="input-group mb-3">
+			<input type="text" class="form-control" id="requisito" name="requisito" placeholder="Requisito" aria-label="Requisito" aria-describedby="button-addon2" style="display: block;">
+		</div>
+		<div class="input-group mb-3">
+		<input type="text" class="form-control" id="descricao" name="descricao" placeholder="Descricao" aria-label="Descricao" aria-describedby="button-addon2" style="display: block;">
+	</div>
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" id="prioridade" name="prioridade" placeholder="Prioridade" aria-label="Prioridade" aria-describedby="button-addon2" style="display: block;">
+	</div>
+	<div class="input-group mb-3">
+		<button class="btn btn-outline-secondary" type="submit" id="button-addon2">Salvar</button>
+        </div>
+    </form>
+
 
     <!-- Biblioteca responsável pelos sweetalert2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     
-	<script src="./tarefas.js"></script>
+    <script src="./tarefas.js"></script>
 </body>
 </html>
