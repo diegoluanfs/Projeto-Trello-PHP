@@ -8,12 +8,13 @@ if ($conn->connect_error) {
 }
 
 // receber os dados do formulário
-$tarefa = $_POST["tarefa"];
+$id_projeto = $_POST["id_projeto"];
+$requisito = $_POST["requisito"];
 $descricao = $_POST["descricao"];
-$projeto = $_POST["projeto"];
+$prioridade = $_POST["prioridade"];
 
 // inserir os dados no banco de dados
-$sql = "INSERT INTO tb_tarefas (nome, descricao, fk_projeto) VALUES ('$tarefa', '$descricao', '$projeto')";
+$sql = "INSERT INTO tb_tarefas (id_projeto, requisito, descricao, prioridade) VALUES ('$id_projeto', '$requisito', '$descricao', '$prioridade')";
 if ($conn->query($sql) === TRUE) {
     echo "Tarefa cadastrada com sucesso!";
 } else {

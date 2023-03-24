@@ -1,37 +1,46 @@
+
 $(document).ready(function() {
-	// Preencher o campo select com os projetos do banco de dados
-	$.ajax({
-		url: './get_projetos.php',
-		dataType: 'json',
-		success: function(data) {
-			$.each(data, function(index, projeto) {
-				$('#projeto').append('<option value="' + projeto.id + '">' + projeto.nome + '</option>');
-			});
-		}
-	});
+	// Obter a string 'de consulta da URL
+	var queryString = window.location.search;
+	// Analisar a string de consulta usando URLSearchParams
+	var urlParams = new URLSearchParams(queryString);
+	// Obter o valor do parâmetro "id"
+	var idProjeto = urlParams.get("id");
+	// Atribuir o valor ao campo de texto
+	$("#id-projeto").val(idProjeto);
 
 	// Enviar o formulário quando o botão for clicado
-	$('#tarefa-form').submit(function(event) {
+	$('#btn-save').on('click', function(event) {
 		event.preventDefault();
-		var tarefa = $('#tarefa').val();
-		var descricao = $('#descricao').val();
-		var projeto = $('#projeto').val();
+		
+		// seleciona os campos do formulário
+		const id_projeto = document.getElementById('id-projeto');
+		const requisito = document.getElementById('requisito');
+		const descricao = document.getElementById('descricao');
+		const prioridade = document.getElementById('prioridade');
 
-        console.log(tarefa);
-        console.log(descricao);
-        console.log(projeto);
-
-		if (tarefa && projeto && descricao) {
+		// verifica se todos os campos foram preenchidos
+		if (id_projeto.value.trim() === '' || requisito.value.trim() === '' || descricao.value.trim() === '' || prioridade.value.trim() === '') {
+			Swal.fire({
+				title: 'Por favor, preencha todos os campos',
+				icon: 'warning'
+			});
+		}else{
 			$.ajax({
 				type: 'POST',
 				url: './create_task.php',
-				data: {tarefa: tarefa, projeto: projeto, descricao: descricao},
+				data: {id_projeto: id_projeto.value, requisito: requisito.value, descricao: descricao.value, prioridade: prioridade.value},
 				success: function() {
 					Swal.fire({
 						title: 'Tarefa cadastrada com sucesso!',
 						icon: 'success'
 					});
-					$('#tarefa-form')[0].reset();
+					$('#id-projeto').val('');
+					$('#requisito').val('');
+					$('#descricao').val('');
+					$('#prioridade').val('');
+					$("#id-projeto").val(idProjeto);
+					table.ajax.reload();
 				},
 				error: function() {
 					Swal.fire({
@@ -40,43 +49,108 @@ $(document).ready(function() {
 					});
 				}
 			});
-		} else {
-			Swal.fire({
-				title: 'Por favor, preencha todos os campos',
-				icon: 'warning'
-			});
 		}
 	});
-});
 
-function carrega_projetos(callback) {
-    $.ajax({
-        url: './get_projetos.php',
-        method: 'GET',
-        dataType: 'json',
-        success: function(projetos) {
-            callback(projetos);
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Ocorreu um erro ao carregar os projetos!',
-            });
-        },
-    });
-}
+	var initLoad = true;
+	
+	var table = $('#list-table').DataTable({
+		ajax: {
+			url: './get_requisitos.php?id='+idProjeto,
+			type: 'GET',
+			dataSrc: ''
+		},
+		columns: [
+			{ data: 'id' },
+			{ data: 'id' },
+			{ data: 'requisito' },
+			{ data: 'descricao' },
+			{ data: 'prioridade' },
+			{ data: 'id_projeto' },
+			{ data: '' }
+		],
+		columnDefs: [
+			{
+				className: 'control',
+				responsivePriority: 2,
+				targets: 0
+			},
+			{
+				targets: 1,
+				visible: false,
+				render: function (data, type, full, meta) {
+					return formatColumnText(full['id']);
+				}
+			},
+			{
+				targets: 2,
+				render: function (data, type, full, meta) {
+					return formatColumnText(full['requisito']);
+				}
+			},
+			{
+				targets: 3,
+				render: function (data, type, full, meta) {
+					return formatColumnText(full['descricao']);
+				}
+			},
+			{
+				targets: 4,
+				render: function (data, type, full, meta) {
+					return formatColumnText(full['prioridade']);
+				}
+			},
+			{
+				targets: 5,
+				visible: true,
+				render: function (data, type, full, meta) {
+					return formatColumnText(full['id_projeto']);
+				}
+			},
+			{
+				targets: -1,
+				render: function (data, type, full, meta) {
+					var buttons = [
+						{
+							text: 'Edit',
+							action: full['id'],
+							icon: 'edit',
+							class: ''
+						},
+						{
+							text: 'Del',
+							action: full['id'],
+							icon: 'edit',
+							class: ''
+						},
+					]
+					return formatColumnButtons(buttons);
+				}
+			}
+		],
+	});
+		
+	function formatColumnText(text) {
+		var $rowOutput =
+			'<div class="d-flex justify-content-left align-items-center">' +
+			'<div class="d-flex flex-column">' +
+			'<h6 class="user-name text-truncate mb-0">' +
+			text +
+			'</h6>' +
+			'</div>' +
+			'</div>';
+		return $rowOutput;
+	}
 
-function preenche_select_projetos(projetos) {
-    var select = $('#projeto');
-    select.empty();
-    $.each(projetos, function(i, projeto) {
-        select.append($('<option>').val(projeto.id).text(projeto.nome));
-    });
-}
-
-$(document).ready(function() {
-    carrega_projetos(function(projetos) {
-        preenche_select_projetos(projetos);
-    });
+	function formatColumnButtons(buttons) {
+		var ret = '<div class="d-flex align-items-center col-actions">';
+		$.each(buttons, function (index, button) {
+			if (button.property == null) {
+				button.property = '';
+			}
+			ret += '<a href="' + button.action + '" class="dropdown-item ' + button.class + '" ' + button.property + '>' + button.text + '</a>';
+		});
+		ret += '</div>';
+		return ret;
+	}
 });

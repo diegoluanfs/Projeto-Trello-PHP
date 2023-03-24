@@ -7,15 +7,12 @@ $(document).ready(function() {
             type: "POST",
             data: {projeto: projeto},
             success: function(response) {
-                console.log('response: ', response);
                 var id_projeto = parseInt(response); // Converte a resposta em um número inteiro
                 Swal.fire(
                     'Salvo!',
                     'Projeto salvo com sucesso!'
                 );
-                setTimeout(function() {
-                    window.location.href = './tarefas/tarefas.html?id=' + id_projeto; // Redireciona para outra página, passando o ID do projeto como parâmetro na URL
-                }, 3000); // Espera 3 segundos antes de redirecionar para outra página
+                window.location.href = './tarefas/tarefas.html?id=' + id_projeto;
             },
             error: function(ex){
                 Swal.fire({
